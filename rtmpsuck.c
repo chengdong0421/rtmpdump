@@ -711,6 +711,7 @@ WriteStream(char **buf,	// target pointer, maybe preallocated
 TFTYPE
 controlServerThread(void *unused)
 {
+  /*
   char ich;
   while (1)
     {
@@ -727,6 +728,7 @@ controlServerThread(void *unused)
 	  RTMP_LogPrintf("Unknown command \'%c\', ignoring\n", ich);
 	}
     }
+  */
   TFRET();
 }
 
