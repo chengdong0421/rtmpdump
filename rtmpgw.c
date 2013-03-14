@@ -271,6 +271,7 @@ http_unescape(char *data)
 TFTYPE
 controlServerThread(void *unused)
 {
+  /*
   char ich;
   while (1)
     {
@@ -286,6 +287,7 @@ controlServerThread(void *unused)
 	  RTMP_LogPrintf("Unknown command \'%c\', ignoring\n", ich);
 	}
     }
+  */
   TFRET();
 }
 
