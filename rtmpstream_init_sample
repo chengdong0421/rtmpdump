@@ -1,0 +1,50 @@
+#!/bin/bash
+# For RedHat and cousins:
+# chkconfig: 2345 85 85
+# description: rtmpsuck flash streaming server
+# processname: rtmpsuck
+
+PROG=rtmpsuck
+RTMPDUMP_PATH=/opt/rtmpdump
+DAEMON=$RTMPDUMP_PATH/$PROG
+PIDFILE=/var/run/$PROG.pid
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+
+case "$1" in
+  start)
+	echo -n $"Starting $PROG: "
+	cd $RTMPDUMP_PATH
+	$DAEMON >/dev/null 2>/dev/null &
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ]; then
+		echo $! > $PIDFILE
+		touch /var/lock/subsys/$PROG
+	fi
+	[ $RETVAL -eq 0 ] && success $"$PROG startup" || failure $"$PROG startup"
+	echo
+	;;
+	stop)
+	echo -n $"Shutting down $PROG: "
+	killproc -p $PIDFILE
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$PROG
+	;;
+	restart)
+	$0 stop
+	$0 start
+	;;
+	status)
+	status $PROG -p $PIDFILE
+	RETVAL=$?
+	;;
+	*)
+	echo $"Usage: $0 {start|stop|restart|status}"
+	RETVAL=1
+esac
+
+exit $RETVAL
