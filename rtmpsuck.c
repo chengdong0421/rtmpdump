@@ -953,10 +953,10 @@ TFTYPE doServe(void *arg)	// server socket and state (our listening socket)
                        RTMP_ClientPacket(&server->rc, &pc))
                      {
                        int len = WriteStream(&buf, &buflen, &server->stamp, &pc);
-+                      if(server->f_cur->f_file==0){//JAVE attempt at workaround
-+                        RTMP_Log(RTMP_LOGERROR, "%s, stream oddly 0 ", __FUNCTION__);
-+                        goto cleanup;
-+                      }
+                       if (server->f_cur->f_file==0){//JAVE attempt at workaround
+                         RTMP_Log(RTMP_LOGERROR, "%s, stream oddly 0 ", __FUNCTION__);
+                         goto cleanup;
+                       }
                        if (len > 0 && fwrite(buf, 1, len, server->f_cur->f_file) != len)
                          goto cleanup;
                      }
