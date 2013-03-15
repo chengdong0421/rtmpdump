@@ -951,11 +951,15 @@ TFTYPE doServe(void *arg)	// server socket and state (our listening socket)
                        pc.m_packetType == RTMP_PACKET_TYPE_INFO ||
                        pc.m_packetType == RTMP_PACKET_TYPE_FLASH_VIDEO) &&
                        RTMP_ClientPacket(&server->rc, &pc))
-                    {
-                      int len = WriteStream(&buf, &buflen, &server->stamp, &pc);
-                      if (len > 0 && fwrite(buf, 1, len, server->f_cur->f_file) != len)
-                        goto cleanup;
-                    }
+                     {
+                       int len = WriteStream(&buf, &buflen, &server->stamp, &pc);
++                      if(server->f_cur->f_file==0){//JAVE attempt at workaround
++                        RTMP_Log(RTMP_LOGERROR, "%s, stream oddly 0 ", __FUNCTION__);
++                        goto cleanup;
++                      }
+                       if (len > 0 && fwrite(buf, 1, len, server->f_cur->f_file) != len)
+                         goto cleanup;
+                     }
                   else if (pc.m_packetType == RTMP_PACKET_TYPE_FLEX_MESSAGE ||
                            pc.m_packetType == RTMP_PACKET_TYPE_INVOKE)
                     {
